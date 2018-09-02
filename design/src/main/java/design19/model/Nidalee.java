@@ -40,7 +40,7 @@ public class Nidalee extends Hero {
     }
 
     @Override
-    public double getManaRate() {
+    public double manaRate() {
         return 1.0 * this.state.mana / this.state.maxMana;
     }
 

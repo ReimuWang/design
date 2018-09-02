@@ -24,7 +24,7 @@ public class View extends Frame {
 
     public void launchFrame() {
         super.setLocation(500, 200);
-        super.setSize(324, 618 + 77);
+        super.setSize(330, 713);
         new Thread(this.new RepaintRunnable()).start();
         super.addWindowListener(
             new WindowAdapter() {
@@ -52,7 +52,7 @@ public class View extends Frame {
                         View.this.nidalee.useR();
                         break;
                     case KeyEvent.VK_X:
-                        View.this.nidalee.damage(100);
+                        View.this.nidalee.damage(1000);
                         break;
                     }
                 }
@@ -63,37 +63,40 @@ public class View extends Frame {
 
     @Override
     public void paint(Graphics g) {
+        // 基本参数
+        int leftBar = 11;
+        int aboveBar = 45;
+        int imgWidth = 308;
+        int imgHeight = 560;
+        int skillWidth = 308 / 4;
         // 血条蓝条
-        int slotWidth = 308;
         int slotHeight = 10;
         g.setColor(this.getHealthColor());
-        g.fillRect(8, 30, (int)(slotWidth * this.nidalee.getHealthRate()), slotHeight);
+        g.fillRect(leftBar, aboveBar, (int)(imgWidth * this.nidalee.getHealthRate()), slotHeight);
         if (this.nidalee.ifHaveMana()) {
             g.setColor(Color.BLUE);
-            g.fillRect(8, 40, (int)(slotWidth * this.nidalee.getManaRate()), slotHeight);
-        } else {
-            g.setColor(Color.GRAY);
-            g.fillRect(8, 40, 308, 10);
+            g.fillRect(leftBar, aboveBar + slotHeight, (int)(imgWidth * this.nidalee.getManaRate()), slotHeight);
         }
         // 图片
-        g.drawImage(this.loadImgWeaken(this.nidalee.getImgKeyWord() + ".jpg"), 8, 50, null);
+        g.drawImage(this.loadImgWeaken(this.nidalee.getImgKeyWord() + ".jpg"), leftBar, aboveBar + 2 * slotHeight, null);
         // 技能图标
-        g.drawImage(this.loadImgWeaken(this.nidalee.getImgKeyWord() + "Q.jpg"), 8, 610, null);
-        g.drawImage(this.loadImgWeaken(this.nidalee.getImgKeyWord() + "W.jpg"), 8 + 77, 610, null);
-        g.drawImage(this.loadImgWeaken(this.nidalee.getImgKeyWord() + "E.jpg"), 8 + 77 * 2, 610, null);
-        g.drawImage(this.loadImgWeaken("R.jpg"), 8 + 77 * 3, 610, null);
+        int skillH = aboveBar + 2 * slotHeight + imgHeight;
+        g.drawImage(this.loadImgWeaken(this.nidalee.getImgKeyWord() + "Q.jpg"), leftBar, skillH, null);
+        g.drawImage(this.loadImgWeaken(this.nidalee.getImgKeyWord() + "W.jpg"), leftBar + skillWidth, skillH, null);
+        g.drawImage(this.loadImgWeaken(this.nidalee.getImgKeyWord() + "E.jpg"), leftBar + skillWidth * 2, skillH, null);
+        g.drawImage(this.loadImgWeaken("R.jpg"), leftBar + skillWidth * 3, skillH, null);
         // 技能冷却
         g.setColor(Color.BLACK);
-        int qCDWidth = (int)(this.nidalee.remainQ() * 77);
-        g.fillRect(8, 610 + 77 - qCDWidth, 77, qCDWidth);
-        int wCDWidth = (int)(this.nidalee.remainW() * 77);
-        g.fillRect(8 + 77, 610 + 77 - wCDWidth, 77, wCDWidth);
-        int eCDWidth = (int)(this.nidalee.remainE() * 77);
-        g.fillRect(8 + 77 * 2, 610 + 77 - eCDWidth, 77, eCDWidth);
-        int rCDWidth = (int)(this.nidalee.remainR() * 77);
-        g.fillRect(8 + 77 * 3, 610 + 77 - rCDWidth, 77, rCDWidth);
+        int qCDHeight = (int)(this.nidalee.remainQ() * skillWidth);
+        g.fillRect(leftBar, skillH + skillWidth - qCDHeight, skillWidth, qCDHeight);
+        int wCDHeight = (int)(this.nidalee.remainW() * skillWidth);
+        g.fillRect(leftBar + skillWidth, skillH + skillWidth - wCDHeight, skillWidth, wCDHeight);
+        int eCDHeight = (int)(this.nidalee.remainE() * skillWidth);
+        g.fillRect(leftBar + skillWidth * 2, skillH + skillWidth - eCDHeight, skillWidth, eCDHeight);
+        int rCDHeight = (int)(this.nidalee.remainR() * skillWidth);
+        g.fillRect(leftBar + skillWidth * 3, skillH + skillWidth - rCDHeight, skillWidth, rCDHeight);
         // 阵亡文字
-        if (this.nidalee.isDeath()) g.drawImage(this.loadImg("death.png"), 40, 300, null);
+        if (this.nidalee.isDeath()) g.drawImage(this.loadImg("death.png"), leftBar + 35, aboveBar + 250, null);
     }
 
     private class RepaintRunnable implements Runnable {

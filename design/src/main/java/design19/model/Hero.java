@@ -22,7 +22,7 @@ public abstract class Hero {
 
     public abstract boolean ifHaveMana();
 
-    public abstract double getManaRate();
+    protected abstract double manaRate();
 
     public abstract String getImgKeyWord();
 
@@ -72,6 +72,11 @@ public abstract class Hero {
 
     public double getHealthRate() {
         return 1.0 * this.health / this.maxHealth;
+    }
+
+    public double getManaRate() {
+        if (!this.ifHaveMana()) throw new UnsupportedOperationException();
+        return this.manaRate();
     }
 
     long remainTime(Skill skill) {
